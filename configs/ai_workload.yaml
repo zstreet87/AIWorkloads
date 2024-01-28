@@ -1,0 +1,4 @@
+# configs/ai_workload.yaml
+
+script_path: "ai_workload/default_script.py"
+script_args: "--default_arg value"

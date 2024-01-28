@@ -1,0 +1,10 @@
+defaults:
+  - configs/slurm@slurm
+  - configs/ai_workload@ai_workload
+  - _self_ # needs to be last to enable overriding
+
+slurm:
+  job_name: "ZZZZ" # This overrides the default job name in slurm.yaml
+
+ai_workload:
+  script_args: "AAAAAA" # This overrides the default script_args in ai_workload.yaml

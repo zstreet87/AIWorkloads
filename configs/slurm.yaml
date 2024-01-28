@@ -1,0 +1,6 @@
+# configs/ai_workload.yaml
+
+job_name: "default_job"
+cpus_per_task: 2
+mem_per_cpu: 1000
+time: "01:00:00"
