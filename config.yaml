@@ -1,10 +1,14 @@
 defaults:
+  - configs/dockerfile@dockerfile
+  - configs/workload@workload
   - configs/slurm@slurm
-  - configs/ai_workload@ai_workload
   - _self_ # needs to be last to enable overriding
 
-slurm:
-  job_name: "ZZZZ" # This overrides the default job name in slurm.yaml
+dockerfile:
+  base_image: "MY_BASE_IMAGE"
 
-ai_workload:
-  script_args: "AAAAAA" # This overrides the default script_args in ai_workload.yaml
+workload:
+  num_epochs: "AAAAAA"
+
+slurm:
+  job_name: "ZZZZ"

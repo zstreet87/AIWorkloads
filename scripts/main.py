@@ -3,10 +3,12 @@ from omegaconf import DictConfig, OmegaConf
 import os
 import sys
 
+from singularity import build_and_save_image
+
 # Add the project root to the Python path in one line
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from codegen import generate_slurm_script, generate_workload_script
+from codegen import generate_workload_script, generate_dockerfile, generate_slurm_script
 
 
 # Adding the scripts directory to the Python path
@@ -19,11 +21,14 @@ from codegen import generate_slurm_script, generate_workload_script
 
 @hydra.main(version_base=None, config_path="../", config_name="config")
 def main(cfg: DictConfig):
-    # Generate Slurm script
-    generate_slurm_script(cfg.slurm)
 
-    # Generate AI workload script
-    generate_workload_script(cfg.ai_workload)
+    generate_workload_script(cfg.workload)
+    generate_dockerfile(cfg.dockerfile)
+
+    image_name = "my_docker_image"
+    build_and_save_image(".", image_name)
+
+    generate_slurm_script(cfg.slurm, cfg.workload, image_name)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,27 @@
+use_huggingface: true
+use_deepspeed: false
+huggingface:
+  env_vars:
+    HF_DATASETS_CACHE: "/mnt/shared/datasets_cache"
+  script_path: "path/to/huggingface/script.py"
+  model_name: "bert-base-uncased"
+  task: "text-classification"
+  learning_rate: 5e-5
+  training:
+    dataset: "glue"
+    dataset_config: "mrpc"
+    batch_size: 16
+    num_epochs: 3
+    learning_rate: 5e-5
+  environment:
+    use_gpu: true
+    num_gpus: 1
+  output:
+    model_save_path: "/mnt/shared/model" # Path on the shared file system
+    results_save_path: "/mnt/login_node/results" # Path on the login node
+  additional_args: ""
+common:
+  batch_size: 16
+  num_epochs: 3
+  script_path: "workload/default_script.py"
+  script_args: "--default_arg value"

@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "AIWorkloads"
+version = "0.1.0"
+description = "Launches multi-node AI workloads for benchmarking"
+authors = ["Zachary Streeter <Zachary.Streeter@amd.com"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+hydra-core = "^1.1"
+transformers = "^4.10.0" 
+datasets = "^1.11.0"
+torch = "^1.9.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.5"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

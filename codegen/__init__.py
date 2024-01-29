@@ -1,2 +1,3 @@
 from .generate_slurm_script import generate_slurm_script
 from .generate_workload_script import generate_workload_script
+from .generate_dockerfile import generate_dockerfile
