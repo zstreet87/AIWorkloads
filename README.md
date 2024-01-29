@@ -1,3 +1,3 @@
 # AIWorkloads
 
-A configuration-driven-AI-model project for benchmarking.
+A configuration-driven-AI-model project for testing.
