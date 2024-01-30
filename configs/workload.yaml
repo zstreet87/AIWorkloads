@@ -1,9 +1,7 @@
-use_huggingface: true
-use_deepspeed: false
 huggingface:
   env_vars:
     HF_DATASETS_CACHE: "/mnt/shared/datasets_cache"
-  script_path: "path/to/huggingface/script.py"
+  script: "hf.py"
   model_name: "bert-base-uncased"
   task: "text-classification"
   learning_rate: 5e-5
@@ -17,11 +15,14 @@ huggingface:
     use_gpu: true
     num_gpus: 1
   output:
-    model_save_path: "/mnt/shared/model" # Path on the shared file system
-    results_save_path: "/mnt/login_node/results" # Path on the login node
+    model_save_path: "/workspace" # assumed to be mounted at shared-file system location
+    results_save_path: "/workspace"
   additional_args: ""
 common:
   batch_size: 16
   num_epochs: 3
-  script_path: "workload/default_script.py"
-  script_args: "--default_arg value"
+# requirements:
+#   - numpy
+#   - pandas
+#   - scikit-learn
+#   - tensorflow

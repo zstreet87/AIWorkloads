@@ -1,12 +1,12 @@
 import os
 
 
-def generate_dockerfile(dockerfile_cfg):
-    dockerfile_content = f"FROM {dockerfile_cfg.base_image}\n"
-    dockerfile_content += f"WORKDIR {dockerfile_cfg.workdir}\n"
+def generate_dockerfile(cfg):
+    dockerfile_content = f"FROM {cfg.dockerfile.base_image}\n"
+    dockerfile_content += f"WORKDIR {cfg.dockerfile.workdir}\n"
 
     # Handling different distributions
-    distro_cfg = dockerfile_cfg.packages.get(dockerfile_cfg.distro)
+    distro_cfg = cfg.dockerfile.packages.get(cfg.dockerfile.distro)
     dockerfile_content += f"RUN {distro_cfg.update_command}\n"
 
     # Install additional system packages based on distribution
@@ -14,19 +14,21 @@ def generate_dockerfile(dockerfile_cfg):
         packages = " ".join(distro_cfg.additional_packages)
         dockerfile_content += f"RUN {distro_cfg.install_command} {packages}\n"
 
-    # Copy required files
-    for file in dockerfile_cfg.copy_files:
-        dockerfile_content += f"COPY {file} {dockerfile_cfg.workdir}/\n"
+    # Copy local workloads
+    if cfg.workload.use_huggingface:
+        dockerfile_content += (
+            f"COPY {cfg.workload.huggingface.script} {cfg.dockerfile.workdir}/\n"
+        )
 
     # Install Python packages
-    dockerfile_content += "RUN pip install -r requirements.txt\n"
+    # dockerfile_content += "RUN pip install -r requirements.txt\n"
 
-    if dockerfile_cfg.python_packages:
-        python_packages = " ".join(dockerfile_cfg.python_packages)
+    if cfg.dockerfile.python_packages:
+        python_packages = " ".join(cfg.dockerfile.python_packages)
         dockerfile_content += f"RUN pip install {python_packages}\n"
 
     # Build packages from source
-    for package in dockerfile_cfg.build_from_source:
+    for package in cfg.dockerfile.build_from_source:
         if package.enabled:
             dockerfile_content += (
                 f"RUN wget {package.url} -O /tmp/{package.name}.tar.gz \\\n"
@@ -42,10 +44,10 @@ def generate_dockerfile(dockerfile_cfg):
             dockerfile_content += "    && rm -rf /tmp/{}*\n".format(package.name)
 
     # Command to run
-    dockerfile_content += f'CMD ["{dockerfile_cfg.command}"]\n'
+    dockerfile_content += f'CMD ["{cfg.dockerfile.command}"]\n'
 
     # Write the Dockerfile
-    script_path = os.path.join(os.getcwd(), "Dockerfile")
+    script_path = os.path.join(cfg.paths.generated_files, "Dockerfile")
     with open(script_path, "w") as file:
         file.write(dockerfile_content)
     print(f"Dockerfile script generated at {script_path}")

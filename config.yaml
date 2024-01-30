@@ -1,14 +1,26 @@
 defaults:
   - configs/dockerfile@dockerfile
   - configs/workload@workload
-  - configs/slurm@slurm
+  - configs/containerization@containerization
+  - configs/job_schedular@job_schedular
   - _self_ # needs to be last to enable overriding
 
+
+paths:
+  generated_files: "workspace" # shared-file system location
+
 dockerfile:
-  base_image: "MY_BASE_IMAGE"
+  base_image: "ubuntu"
 
 workload:
+  use_huggingface: true
+  use_deepspeed: false
   num_epochs: "AAAAAA"
 
-slurm:
-  job_name: "ZZZZ"
+containerization:
+  use_docker: true
+  use_singularity: false
+
+job_schedular:
+  use_slurm: true
+  use_kubernetes: false

@@ -1,9 +1,6 @@
 base_image: "python:3.8-slim"
 workdir: "/workspace"
 distro: "ubuntu" # or "rockylinux"
-copy_files:
-  - "workload.sh" # Generated bash script used as CMD
-  - "scripts/hf_workload.py"
 packages:
   ubuntu:
     update_command: "apt-get update"
@@ -31,4 +28,4 @@ build_from_source:
   #     - "./configure"
   #     - "make"
   #     - "make install"
-command: "./workload.sh"
+command: "workload.sh"
