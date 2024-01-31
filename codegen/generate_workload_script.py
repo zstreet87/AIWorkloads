@@ -4,7 +4,7 @@ import os
 def generate_workload_script(cfg):
     workload_script = ""
     # NOTE: only supporting hf script generation at the moment
-    if cfg.workload.use_huggingface:
+    if cfg.workload.use == "huggingface":
         workload_script = f"""#!/usr/bin/env bash
 # HF script
 python {cfg.workload.huggingface.script} \\

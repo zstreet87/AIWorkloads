@@ -1,7 +1,7 @@
+use: "docker" # default
 docker:
   image_name: "my_image"
   # ... other docker default configurations ...
-
 singularity:
   image_name: "my_image"
   # ... other singularity default configurations ...

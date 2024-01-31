@@ -4,7 +4,7 @@ import os
 
 
 def submit_job(cfg):
-    if cfg.job_schedular.use_slurm:
+    if cfg.job_schedular.use == "slurm":
         # Full path to the SLURM job script
         full_script_path = f"{cfg.paths.generated_files}/slurm_job.sh"
 
@@ -14,14 +14,14 @@ def submit_job(cfg):
             print(f"SLURM job submitted successfully using script: {full_script_path}")
         except subprocess.CalledProcessError as e:
             print(f"Error occurred while submitting SLURM job: {e}")
-    if cfg.job_schedular.use_kubernetes:
+    if cfg.job_schedular.use == "kubernetes":
         # TODO: implement kubernetes job submit implementation
         pass
 
 
 def build_save_image(cfg):
 
-    if cfg.containerization.use_docker:
+    if cfg.containerization.use == "docker":
         tarball = (
             f"{cfg.paths.generated_files}/{cfg.containerization.docker.image_name}.tar"
         )
@@ -34,7 +34,7 @@ def build_save_image(cfg):
             return
 
         # copying selected workload
-        if cfg.workload.use_huggingface:
+        if cfg.workload.use == "huggingface":
             src = os.path.join(
                 os.getcwd(), "workloads", cfg.workload.huggingface.script
             )
@@ -65,7 +65,7 @@ def build_save_image(cfg):
         except subprocess.CalledProcessError as e:
             print(f"Error occurred while saving Docker image as tarball: {e}")
 
-    if cfg.containerization.use_singularity:
+    if cfg.containerization.use == "singularity":
         # # Get the path from the WORK environment variable
         # work_path = os.getenv('WORK', '/mnt/share')
         #

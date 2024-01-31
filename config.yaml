@@ -1,3 +1,5 @@
+# DO NOT MODIFY: Default settings required for system operation.
+# -------------------------------------------------------------------------------------
 defaults:
   - configs/dockerfile@dockerfile
   - configs/workload@workload
@@ -5,6 +7,8 @@ defaults:
   - configs/job_schedular@job_schedular
   - _self_ # needs to be last to enable overriding
 
+# Customizable Settings: Below this line, you may adjust the configuration as needed.
+# -------------------------------------------------------------------------------------
 
 paths:
   generated_files: "workspace" # shared-file system location
@@ -13,14 +17,11 @@ dockerfile:
   base_image: "ubuntu"
 
 workload:
-  use_huggingface: true
-  use_deepspeed: false
+  use: "huggingface"
   num_epochs: "AAAAAA"
 
 containerization:
-  use_docker: true
-  use_singularity: false
+  use: "docker"
 
 job_schedular:
-  use_slurm: true
-  use_kubernetes: false
+  use: "slurm"

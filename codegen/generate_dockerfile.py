@@ -15,7 +15,7 @@ def generate_dockerfile(cfg):
         dockerfile_content += f"RUN {distro_cfg.install_command} {packages}\n"
 
     # Copy local workloads
-    if cfg.workload.use_huggingface:
+    if cfg.workload.use == "huggingface":
         dockerfile_content += (
             f"COPY {cfg.workload.huggingface.script} {cfg.dockerfile.workdir}/\n"
         )
