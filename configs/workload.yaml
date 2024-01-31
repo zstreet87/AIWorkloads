@@ -1,4 +1,8 @@
 huggingface:
+  requirements:
+    - transformers
+    - datasets
+    - torch
   env_vars:
     HF_DATASETS_CACHE: "/mnt/shared/datasets_cache"
   script: "hf.py"

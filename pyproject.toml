@@ -1,18 +1,25 @@
 [tool.poetry]
 name = "AIWorkloads"
 version = "0.1.0"
-description = "Launches multi-node AI workloads for benchmarking"
-authors = ["Zachary Streeter <Zachary.Streeter@amd.com"]
+description = "Launches multi-node AI workloads for testing"
+authors = ["Zachary Streeter <Zachary.Streeter@amd.com>"]
+include = ["configs/*.yaml"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
 hydra-core = "^1.1"
-transformers = "^4.10.0" 
-datasets = "^1.11.0"
-torch = "^1.9.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
+
+# [tool.poetry.packages]
+# include = [{ include = "aiworkloads", from = "src" }]
+[[tool.poetry.packages]]
+include = "aiworkloads"
+from = "src"
+
+[tool.poetry.scripts]
+aiworkloads = "aiworkloads.scripts.main:main"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

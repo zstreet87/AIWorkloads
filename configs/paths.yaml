@@ -1,2 +1,1 @@
-paths:
-  generated_files: ${env:WORK, "/mnt/share"}
+generated_files: ${env:WORK, "/mnt/share"}

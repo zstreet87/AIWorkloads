@@ -1,0 +1,15 @@
+paths:
+  generated_files: "workspace" # shared-file system location
+
+dockerfile:
+  base_image: "ubuntu"
+
+workload:
+  use: "huggingface"
+  num_epochs: "AAAAAA"
+
+containerization:
+  use: "docker"
+
+job_schedular:
+  use: "slurm"

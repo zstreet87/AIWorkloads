@@ -16,9 +16,10 @@ def generate_dockerfile(cfg):
         dockerfile_content += (
             f"COPY {cfg.workload.huggingface.script} {cfg.dockerfile.workdir}/\n"
         )
-
-    # TODO: requirements should be for the selected workload
-    # dockerfile_content += "RUN pip install -r requirements.txt\n"
+        dockerfile_content += "RUN pip install -r requirements.txt\n"
+        dockerfile_content += (
+            "RUN pip install " + " ".join(cfg.workload.huggingface.requirements) + "\n"
+        )
 
     if cfg.dockerfile.python_packages:
         python_packages = " ".join(cfg.dockerfile.python_packages)

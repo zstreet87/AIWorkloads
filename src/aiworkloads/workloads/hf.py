@@ -1,5 +1,3 @@
-# ai_script.py
-
 import argparse
 from transformers import (
     AutoModelForSequenceClassification,
