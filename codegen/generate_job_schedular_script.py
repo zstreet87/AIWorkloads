@@ -5,7 +5,6 @@ def generate_job_schedular_script(cfg):
 
     env_vars_script = ""
 
-    # Function to add environment variables
     def add_env_vars(env_vars):
         nonlocal env_vars_script
         for key, value in env_vars.items():
@@ -13,11 +12,9 @@ def generate_job_schedular_script(cfg):
 
     job_schedular_cfg = cfg.job_schedular.get(cfg.job_schedular.use)
     if cfg.job_schedular.use == "slurm":
-        # Check for Hugging Face environment variables
         if cfg.workload.use == "huggingface" and "env_vars" in cfg.workload.huggingface:
             add_env_vars(cfg.workload.huggingface.env_vars)
 
-        # Check for DeepSpeed environment variables
         if cfg.workload.use == "deepspeed" and "env_vars" in cfg.workload.deepspeed:
             add_env_vars(cfg.workload.deepspeed.env_vars)
 

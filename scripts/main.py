@@ -1,9 +1,9 @@
 import hydra
-from omegaconf import DictConfig, OmegaConf
+from omegaconf import DictConfig
 import os
 import sys
 
-# Add the project root to the Python path in one line
+# Add the project root to the Python path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from codegen import (
@@ -22,7 +22,7 @@ def main(cfg: DictConfig):
     generate_dockerfile(cfg)
     build_save_image(cfg)
     generate_job_schedular_script(cfg)
-    # submit_job(cfg)
+    submit_job(cfg)
 
 
 if __name__ == "__main__":

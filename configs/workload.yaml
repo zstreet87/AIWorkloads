@@ -15,7 +15,7 @@ huggingface:
     use_gpu: true
     num_gpus: 1
   output:
-    model_save_path: "/workspace" # assumed to be mounted at shared-file system location
+    model_save_path: "/workspace"
     results_save_path: "/workspace"
   additional_args: ""
 common:

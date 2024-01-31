@@ -9,7 +9,6 @@ defaults:
 
 # Customizable Settings: Below this line, you may adjust the configuration as needed.
 # -------------------------------------------------------------------------------------
-
 paths:
   generated_files: "workspace" # shared-file system location
 

@@ -48,14 +48,12 @@ def build_save_image(cfg):
 
         build_command = f"docker build -t {cfg.containerization.docker.image_name} {cfg.paths.generated_files}"
         try:
-            # Execute the Singularity build command
             subprocess.run(build_command, check=True, shell=True)
             print(f"Docker image '{tarball}' built successfully.")
         except subprocess.CalledProcessError as e:
             print(f"Error occurred while building Docker image: {e}")
             return  # Exit if build fails
 
-        # Save the Docker image as a tarball
         save_command = (
             f"docker save -o {tarball} {cfg.containerization.docker.image_name}"
         )
@@ -66,14 +64,9 @@ def build_save_image(cfg):
             print(f"Error occurred while saving Docker image as tarball: {e}")
 
     if cfg.containerization.use == "singularity":
-        # # Get the path from the WORK environment variable
-        # work_path = os.getenv('WORK', '/mnt/share')
-        #
-        # image_path = os.path.join(work_path, f"{containerization_cfg.image_name}.sif")
 
         build_command = f"singularity build --fakeroot {cfg.containerization.singularity.image_name} docker://{cfg.paths.generated_files}"
         try:
-            # Execute the Singularity build command
             subprocess.run(build_command, check=True, shell=True)
             print(
                 f"Singularity image '{cfg.paths.generated_files}/{cfg.containerization.singularity.image_name}' built successfully."
