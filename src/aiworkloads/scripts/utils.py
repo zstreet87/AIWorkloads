@@ -6,7 +6,7 @@ import os
 def submit_job(cfg):
     if cfg.job_schedular.type == "slurm":
         # Full path to the SLURM job script
-        full_script_path = f"{cfg.paths.generated_files}/slurm_job.sh"
+        full_script_path = f"{cfg.paths.shared_file_system}/slurm_job.sh"
 
         try:
             # Submit the job using sbatch
@@ -22,25 +22,29 @@ def submit_job(cfg):
 def build_save_image(cfg):
 
     if cfg.containerization.type == "docker":
-        tarball = f"{cfg.paths.generated_files}/{cfg.containerization.image_name}.tar"
+        tarball = (
+            f"{cfg.paths.shared_file_system}/{cfg.containerization.image_name}.tar"
+        )
 
         # Check if the tarball already exists
         if os.path.exists(tarball):
             print(
-                f"Docker image tarball already exists at '{cfg.paths.generated_files}'. Skipping build and save."
+                f"Docker image tarball already exists at '{cfg.paths.shared_file_system}'. Skipping build and save."
             )
             return
 
         # copying selected workload
         # if "huggingface" in cfg.workload:
-        src = os.path.join(os.getcwd(), "src/aiworkloads/workloads", cfg.workload.script)
-        dest = os.path.join(cfg.paths.generated_files, cfg.workload.script)
+        src = os.path.join(
+            os.getcwd(), "src/aiworkloads/workloads", cfg.workload.script
+        )
+        dest = os.path.join(cfg.paths.shared_file_system, cfg.workload.script)
         shutil.copyfile(src, dest)
         print(
-            f"Copied workload script {cfg.workload.script} to {cfg.paths.generated_files}"
+            f"Copied workload script {cfg.workload.script} to {cfg.paths.shared_file_system}"
         )
 
-        build_command = f"docker build -t {cfg.containerization.image_name} {cfg.paths.generated_files}"
+        build_command = f"docker build -t {cfg.containerization.image_name} {cfg.paths.shared_file_system}"
         try:
             subprocess.run(build_command, check=True, shell=True)
             print(f"Docker image '{tarball}' built successfully.")
@@ -57,11 +61,19 @@ def build_save_image(cfg):
 
     if cfg.containerization.type == "singularity":
 
-        build_command = f"singularity build --fakeroot {cfg.containerization.image_name} docker:/{cfg.paths.generated_files}"
+        sif = f"{cfg.paths.shared_file_system}/{cfg.containerization.image_name}.sif"
+
+        # Check if the tarball already exists
+        if os.path.exists(sif):
+            print(
+                f"Singularity image already exists at '{cfg.paths.shared_file_system}'. Skipping build and save."
+            )
+            return
+        build_command = f"singularity build --fakeroot {cfg.containerization.image_name} docker:/{cfg.paths.shared_file_system}"
         try:
             subprocess.run(build_command, check=True, shell=True)
             print(
-                f"Singularity image '{cfg.paths.generated_files}/{cfg.containerization.image_name}' built successfully."
+                f"Singularity image '{cfg.paths.shared_file_system}/{cfg.containerization.image_name}' built successfully."
             )
         except subprocess.CalledProcessError as e:
             print(f"Error occurred while building Singularity image: {e}")

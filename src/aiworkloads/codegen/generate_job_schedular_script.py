@@ -36,11 +36,11 @@ def generate_job_schedular_script(cfg):
 
 module load singularity  # Load Singularity module using LMod
 srun singularity exec \\
-    -B {cfg.paths.generated_files}:{cfg.paths.generated_files} \\ # mounting shared-file system
+    -B {cfg.paths.shared_file_system}:{cfg.paths.shared_file_system} \\ # mounting shared-file system
     {launch_container}
         """
 
-        script_path = os.path.join(cfg.paths.generated_files, "slurm_job.sh")
+        script_path = os.path.join(cfg.paths.shared_file_system, "slurm_job.sh")
         with open(script_path, "w") as file:
             file.write(slurm_script)
         print(f"Slurm script generated at {script_path}")

@@ -1,2 +1,2 @@
 paths:
-  generated_files: "/mnt/share"
+  shared_file_system: "/mnt/share"

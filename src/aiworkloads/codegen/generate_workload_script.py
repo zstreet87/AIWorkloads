@@ -15,12 +15,12 @@ python {cfg.workload.script} \\
     --batch_size {cfg.workload.batch_size} \\
     --num_epochs {cfg.workload.num_epochs} \\
     --learning_rate {cfg.workload.training.learning_rate} \\
-    --model_save_path {cfg.paths.generated_files} \\
-    --results_save_path {cfg.paths.generated_files} \\
+    --model_save_path {cfg.paths.shared_file_system} \\
+    --results_save_path {cfg.paths.shared_file_system} \\
     {cfg.workload.additional_args}
         """
 
-    script_path = os.path.join(cfg.paths.generated_files, "workload.sh")
+    script_path = os.path.join(cfg.paths.shared_file_system, "workload.sh")
     with open(script_path, "w") as file:
         file.write(workload_script)
     print(f"AI workload script generated at {script_path}")
