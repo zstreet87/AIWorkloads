@@ -57,7 +57,7 @@ def build_save_image(cfg):
 
     if cfg.containerization.type == "singularity":
 
-        build_command = f"singularity build --fakeroot {cfg.containerization.image_name} docker://{cfg.paths.generated_files}"
+        build_command = f"singularity build --fakeroot {cfg.containerization.image_name} docker:/{cfg.paths.generated_files}"
         try:
             subprocess.run(build_command, check=True, shell=True)
             print(
