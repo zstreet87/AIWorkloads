@@ -1,0 +1,32 @@
+dockerfile:
+  base_image: "python:3.8-slim"
+  workdir: "/workspace"
+  distro: "ubuntu" # or "rockylinux"
+  packages:
+    ubuntu:
+      update_command: "apt-get update"
+      install_command: "apt-get install -y"
+      additional_packages: [] # Additional Ubuntu packages
+    rockylinux:
+      update_command: "dnf update -y"
+      install_command: "dnf install -y"
+      additional_packages: [] # Additional Rocky Linux packages
+  python_packages: [] # Additional Python packages required
+  build_from_source:
+    - name: "openmpi"
+      enabled: false
+      version: "4.1.1"
+      url: "https://download.open-mpi.org/release/open-mpi/v4.1/openmpi-4.1.1.tar.gz"
+      build_commands:
+        - "./configure --prefix=/usr/local"
+        - "make all install"
+    # Example for another package
+    # - name: "another_package"
+    #   enabled: true
+    #   version: "1.0"
+    #   url: "http://example.com/another_package.tar.gz"
+    #   build_commands:
+    #     - "./configure"
+    #     - "make"
+    #     - "make install"
+  command: "workload.sh"

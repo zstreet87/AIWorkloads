@@ -12,7 +12,7 @@ def generate_dockerfile(cfg):
         packages = " ".join(distro_cfg.additional_packages)
         dockerfile_content += f"RUN {distro_cfg.install_command} {packages}\n"
 
-    if cfg.workload.use == "huggingface":
+    if cfg.workload == "huggingface":
         dockerfile_content += (
             f"COPY {cfg.workload.huggingface.script} {cfg.dockerfile.workdir}/\n"
         )

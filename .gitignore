@@ -4,6 +4,10 @@ outputs/
 # Only for local testing
 workspace/
 
+# Only for local testing
+workspace/
+user_config.yaml
+
 # Ignore Python bytecode cache
 __pycache__/
 *.pyc

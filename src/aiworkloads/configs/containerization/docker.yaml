@@ -1,0 +1,2 @@
+type: "docker"
+image_name: "my_image"

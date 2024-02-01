@@ -1,6 +1,0 @@
-defaults:
-  - containerization
-  - dockerfile
-  - job_schedular
-  - paths
-  - workload

@@ -1,0 +1,7 @@
+type: "slurm"
+job_name: "default_slurm_job"
+partition: "devel"
+nodes: 2
+ntasks: 8
+time: "01:00:00"
+# ... other SLURM default configurations ...

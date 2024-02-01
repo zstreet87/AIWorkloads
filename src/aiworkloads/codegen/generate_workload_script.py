@@ -4,20 +4,20 @@ import os
 def generate_workload_script(cfg):
     workload_script = ""
     # NOTE: only supporting hf script generation at the moment
-    if cfg.workload.use == "huggingface":
+    if cfg.workload.type == "huggingface":
         workload_script = f"""#!/usr/bin/env bash
 # HF script
-python {cfg.workload.huggingface.script} \\
-    --model_name {cfg.workload.huggingface.model_name} \\
-    --task {cfg.workload.huggingface.task} \\
-    --dataset {cfg.workload.huggingface.training.dataset} \\
-    --dataset_config {cfg.workload.huggingface.training.dataset_config} \\
-    --batch_size {cfg.workload.common.batch_size} \\
-    --num_epochs {cfg.workload.common.num_epochs} \\
-    --learning_rate {cfg.workload.huggingface.training.learning_rate} \\
+python {cfg.workload.script} \\
+    --model_name {cfg.workload.model_name} \\
+    --task {cfg.workload.task} \\
+    --dataset {cfg.workload.training.dataset} \\
+    --dataset_config {cfg.workload.training.dataset_config} \\
+    --batch_size {cfg.workload.batch_size} \\
+    --num_epochs {cfg.workload.num_epochs} \\
+    --learning_rate {cfg.workload.training.learning_rate} \\
     --model_save_path {cfg.paths.generated_files} \\
     --results_save_path {cfg.paths.generated_files} \\
-    {cfg.workload.huggingface.additional_args}
+    {cfg.workload.additional_args}
         """
 
     script_path = os.path.join(cfg.paths.generated_files, "workload.sh")
