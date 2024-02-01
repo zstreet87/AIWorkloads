@@ -1,4 +1,8 @@
 import argparse
+import os
+import torch
+import torch.distributed as dist
+from torch.nn.parallel import DistributedDataParallel as DDP
 from transformers import (
     AutoModelForSequenceClassification,
     AutoTokenizer,
@@ -6,6 +10,11 @@ from transformers import (
     TrainingArguments,
 )
 from datasets import load_dataset
+
+
+def setup_distributed_training():
+    # Set up the distributed training environment
+    torch.distributed.init_process_group(backend="nccl")
 
 
 def train_model(
@@ -18,9 +27,14 @@ def train_model(
     learning_rate,
     model_save_path,
 ):
+    setup_distributed_training()
+
     # Load the tokenizer and model
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = AutoModelForSequenceClassification.from_pretrained(model_name)
+
+    # Make the model DistributedDataParallel
+    model = DDP(model)
 
     # Load and preprocess the dataset
     dataset = load_dataset(dataset_name, dataset_config)
@@ -28,12 +42,18 @@ def train_model(
         lambda x: tokenizer(x["text"], padding=True, truncation=True), batched=True
     )
 
+    # Use DistributedSampler for distributed training
+    train_sampler = torch.utils.data.DistributedSampler(tokenized_dataset["train"])
+    eval_sampler = torch.utils.data.DistributedSampler(tokenized_dataset["validation"])
+
     # Define training arguments
     training_args = TrainingArguments(
         output_dir=model_save_path,
         num_train_epochs=num_epochs,
         per_device_train_batch_size=batch_size,
         learning_rate=learning_rate,
+        do_train=True,
+        do_eval=True,
     )
 
     # Initialize Trainer
@@ -42,13 +62,15 @@ def train_model(
         args=training_args,
         train_dataset=tokenized_dataset["train"],
         eval_dataset=tokenized_dataset["validation"],
+        train_sampler=train_sampler,
+        eval_sampler=eval_sampler,
     )
 
     # Train the model
     trainer.train()
 
     # Save the model
-    model.save_pretrained(model_save_path)
+    model.module.save_pretrained(model_save_path)
 
 
 def main():
@@ -76,4 +98,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    # Detect if we are in a multi-node environment and set up accordingly
+    if "WORLD_SIZE" in os.environ:
+        main()
+    else:
+        print("This script is intended to be run in a distributed environment.")
