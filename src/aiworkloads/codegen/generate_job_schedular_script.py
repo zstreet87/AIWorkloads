@@ -5,7 +5,7 @@ def generate_job_schedular_script(cfg):
 
     env_vars = ""
     if cfg.workload.env_vars:
-        for key, value in cfg.workloads.env_vars.items():
+        for key, value in cfg.workload.env_vars.items():
             env_vars += f"export {key}='{value}'\n"
 
     end_cmd = ""
