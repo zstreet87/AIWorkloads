@@ -13,19 +13,11 @@ def generate_job_schedular_script(cfg):
     if cfg.workload.env_vars:
         add_env_vars(cfg.workload.env_vars)
 
-    launch_container = ""
-    if cfg.containerization.type == "docker":
-        launch_container = f"docker-archive://{cfg.paths.shared_file_system}/{cfg.containerization.image_name}"
-    if cfg.containerization.type == "singularity":
-        launch_container = (
-            f"{cfg.paths.shared_file_system}/{cfg.containerization.image_name}"
-        )
-
-    cmd = ""
+    extra = ""
     if cfg.workload.type == "huggingface":
-        cmd = f"bash {cfg.workload.script}"
+        extra = f"{cfg.workload.script}"
     if cfg.workload.type == "superbench":
-        cmd = f"sb exec --config-file {cfg.workload}"
+        extra = f"--config-file {cfg.workload}"
 
     if cfg.job_schedular.type == "slurm":
 
@@ -59,7 +51,7 @@ echo "***********************"
 module load singularity  # Load Singularity module using LMod
 srun singularity exec \\
     -B {cfg.paths.shared_file_system}:{cfg.paths.shared_file_system} \\ # mounting shared-file system
-    {launch_container} {cmd}
+    {cfg.workload.container_prefix}{cfg.paths.shred_file_system}/{cfg.containerization.image_name} {cfg.workload.cmd} {extra}
         """
 
         script_path = os.path.join(cfg.paths.shared_file_system, "slurm_job.sh")

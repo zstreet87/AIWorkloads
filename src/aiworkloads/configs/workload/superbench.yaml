@@ -1,5 +1,6 @@
 version: v0.10
 type: "superbench"
+cmd: "sb exec"
 enable: null
 monitor:
   enable: true
