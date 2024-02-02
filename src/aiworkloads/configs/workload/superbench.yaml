@@ -50,7 +50,6 @@ benchmarks:
         proc_num: 1
         parallel: no
     parameters:
-
       ngpus: 8
   nccl-bw:gdr-only:
     enable: true
@@ -59,12 +58,12 @@ benchmarks:
         proc_num: 1
         parallel: no
         env:
-          NCCL_IB_PCI_RELAXED_ORDERING: '1'
-          NCCL_NET_GDR_LEVEL: '5'
-          NCCL_P2P_DISABLE: '1'
-          NCCL_SHM_DISABLE: '1'
-          NCCL_MIN_NCHANNELS: '16'
-          NCCL_IB_DISABLE: '0'
+          NCCL_IB_PCI_RELAXED_ORDERING: "1"
+          NCCL_NET_GDR_LEVEL: "5"
+          NCCL_P2P_DISABLE: "1"
+          NCCL_SHM_DISABLE: "1"
+          NCCL_MIN_NCHANNELS: "16"
+          NCCL_IB_DISABLE: "0"
     parameters:
       ngpus: 8
   ib-loopback:
@@ -210,9 +209,9 @@ benchmarks:
       precision: int8
   megatron-gpt:
     modes:
-    - name: mpi
-      proc_num: 1
-      node_num: all
+      - name: mpi
+        proc_num: 1
+        node_num: all
     parameters:
       code_base: /opt/superbench/third_party/Megatron/Megatron-DeepSpeed/
       dataset_url: https://huggingface.co/datasets/suolyer/pile_bookcorpus2/raw/main/test.json

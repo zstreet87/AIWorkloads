@@ -37,7 +37,6 @@ echo "LOCAL_RANK="$LOCAL_RANK
 echo "RANK="$RANK
 echo "***********************"
 
-# Environment variable exports
 {env_vars}
 
 module load singularity  # Load Singularity module using LMod

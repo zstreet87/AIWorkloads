@@ -3,6 +3,7 @@ requirements:
   - torch
 cmd: "bash workload.sh"
 script: "ddp_example.py"
+env_vars: ""
 output:
   model_save_path: "/workspace"
   results_save_path: "/workspace"
