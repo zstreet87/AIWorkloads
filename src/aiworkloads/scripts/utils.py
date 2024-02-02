@@ -19,6 +19,19 @@ def submit_job(cfg):
         pass
 
 
+def copy_workload_to_path(cfg):
+    # copying selected workload
+    if cfg.workload.script:
+        src = os.path.join(
+            os.getcwd(), "src/aiworkloads/workloads", cfg.workload.script
+        )
+        dest = os.path.join(cfg.paths.shared_file_system, cfg.workload.script)
+        shutil.copyfile(src, dest)
+        print(
+            f"Copied workload script {cfg.workload.script} to {cfg.paths.shared_file_system}"
+        )
+
+
 def build_save_image(cfg):
 
     if cfg.containerization.type == "docker":
@@ -32,17 +45,6 @@ def build_save_image(cfg):
                 f"Docker image tarball already exists at '{cfg.paths.shared_file_system}'. Not using generated Dockerfile, skipping build and save."
             )
             return
-
-        # copying selected workload
-        if cfg.workload.script:
-            src = os.path.join(
-                os.getcwd(), "src/aiworkloads/workloads", cfg.workload.script
-            )
-            dest = os.path.join(cfg.paths.shared_file_system, cfg.workload.script)
-            shutil.copyfile(src, dest)
-            print(
-                f"Copied workload script {cfg.workload.script} to {cfg.paths.shared_file_system}"
-            )
 
         build_command = f"docker build -t {cfg.containerization.image_name} {cfg.paths.shared_file_system}"
         try:
