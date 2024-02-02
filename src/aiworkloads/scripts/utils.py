@@ -29,7 +29,7 @@ def build_save_image(cfg):
         # Check if the tarball already exists
         if os.path.exists(tarball):
             print(
-                f"Docker image tarball already exists at '{cfg.paths.shared_file_system}'. Skipping build and save."
+                f"Docker image tarball already exists at '{cfg.paths.shared_file_system}'. Not using generated Dockerfile, skipping build and save."
             )
             return
 
@@ -66,7 +66,7 @@ def build_save_image(cfg):
         # Check if the tarball already exists
         if os.path.exists(sif):
             print(
-                f"Singularity image already exists at '{cfg.paths.shared_file_system}'. Skipping build and save."
+                f"Singularity image already exists at '{cfg.paths.shared_file_system}'. Not using generated Dockerfile, skipping build and save."
             )
             return
         build_command = f"singularity build --fakeroot {cfg.containerization.image_name} docker:/{cfg.paths.shared_file_system}"

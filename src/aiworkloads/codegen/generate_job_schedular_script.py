@@ -17,11 +17,11 @@ def generate_job_schedular_script(cfg):
 
         launch_container = ""
         if cfg.containerization.type == "docker":
-            launch_container = (
-                f'docker-archive://"$WORK"/{cfg.containerization.image_name}'
-            )
+            launch_container = f"docker-archive://{cfg.paths.shared_file_system}/{cfg.containerization.image_name}"
         if cfg.containerization.type == "singularity":
-            launch_container = f'"$WORK"/{cfg.containerization.image_name}'
+            launch_container = (
+                f"{cfg.paths.shared_file_system}/{cfg.containerization.image_name}"
+            )
 
         slurm_script = f"""#!/usr/bin/env bash
 #SBATCH --job-name={cfg.job_schedular.job_name}
