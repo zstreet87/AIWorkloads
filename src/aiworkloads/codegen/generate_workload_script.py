@@ -19,6 +19,9 @@ python {cfg.workload.script} \\
     --results_save_path {cfg.paths.shared_file_system} \\
     {cfg.workload.additional_args}
         """
+    if cfg.workload.type == "superbench":
+        # TODO: Implement superbench workload script generation
+        pass
 
     script_path = os.path.join(cfg.paths.shared_file_system, "workload.sh")
     with open(script_path, "w") as file:

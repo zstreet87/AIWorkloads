@@ -34,15 +34,15 @@ def build_save_image(cfg):
             return
 
         # copying selected workload
-        # if "huggingface" in cfg.workload:
-        src = os.path.join(
-            os.getcwd(), "src/aiworkloads/workloads", cfg.workload.script
-        )
-        dest = os.path.join(cfg.paths.shared_file_system, cfg.workload.script)
-        shutil.copyfile(src, dest)
-        print(
-            f"Copied workload script {cfg.workload.script} to {cfg.paths.shared_file_system}"
-        )
+        if cfg.workload.script:
+            src = os.path.join(
+                os.getcwd(), "src/aiworkloads/workloads", cfg.workload.script
+            )
+            dest = os.path.join(cfg.paths.shared_file_system, cfg.workload.script)
+            shutil.copyfile(src, dest)
+            print(
+                f"Copied workload script {cfg.workload.script} to {cfg.paths.shared_file_system}"
+            )
 
         build_command = f"docker build -t {cfg.containerization.image_name} {cfg.paths.shared_file_system}"
         try:

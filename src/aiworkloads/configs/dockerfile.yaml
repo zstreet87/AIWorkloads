@@ -29,4 +29,3 @@ dockerfile:
     #     - "./configure"
     #     - "make"
     #     - "make install"
-  command: "workload.sh"

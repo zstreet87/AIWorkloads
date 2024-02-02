@@ -40,8 +40,6 @@ def generate_dockerfile(cfg):
                 dockerfile_content += f"    && {command} \\\n"
             dockerfile_content += "    && rm -rf /tmp/{}*\n".format(package.name)
 
-    dockerfile_content += f'CMD ["{cfg.dockerfile.command}"]\n'
-
     script_path = os.path.join(cfg.paths.shared_file_system, "Dockerfile")
     with open(script_path, "w") as file:
         file.write(dockerfile_content)
