@@ -28,14 +28,13 @@ export WORLD_SIZE=$(($SLURM_NNODES * $GPUS_PER_NODE))
 export LOCAL_RANK=$SLURM_LOCALID
 export RANK=$SLURM_PROCID
 
-echo "***SLURM Launch Info***"
+echo "# SLURM Launch Info"
 echo "MASTER_PORT="$MASTER_PORT
 echo "MASTER_ADDR="$MASTER_ADDR
 echo "WORLD_SIZE="$WORLD_SIZE
 echo "GPUS_PER_NODE="$GPUS_PER_NODE
 echo "LOCAL_RANK="$LOCAL_RANK
 echo "RANK="$RANK
-echo "***********************"
 
 {env_vars}
 

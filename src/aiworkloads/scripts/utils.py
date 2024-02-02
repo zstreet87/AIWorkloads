@@ -6,7 +6,7 @@ import os
 def submit_job(cfg):
     if cfg.job_schedular.type == "slurm":
         # Full path to the SLURM job script
-        full_script_path = f"{cfg.paths.shared_file_system}/slurm_job.sh"
+        full_script_path = f"{cfg.paths.shared_file_system}/job_schedular.sh"
 
         try:
             # Submit the job using sbatch

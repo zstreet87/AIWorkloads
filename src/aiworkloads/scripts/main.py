@@ -1,10 +1,5 @@
-import argparse
 import hydra
-from hydra import initialize, compose
-from omegaconf import DictConfig, OmegaConf
-import pkg_resources
-import os
-import sys
+from omegaconf import DictConfig
 
 from aiworkloads.codegen import (
     generate_workload_script,
@@ -27,7 +22,7 @@ def main(cfg: DictConfig) -> None:
     generate_dockerfile(cfg)
     build_save_image(cfg)
     generate_job_schedular_script(cfg)
-    # submit_job(cfg)
+    submit_job(cfg)
 
 
 if __name__ == "__main__":
