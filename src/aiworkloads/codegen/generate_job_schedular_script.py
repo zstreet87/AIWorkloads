@@ -9,8 +9,6 @@ def generate_job_schedular_script(cfg):
             env_vars += f"export {key}='{value}'\n"
 
     end_cmd = ""
-    if cfg.workload.type == "huggingface":
-        end_cmd = f"{cfg.workload.script}"
     if cfg.workload.type == "superbench":
         end_cmd = f"--config-file {cfg.workload}"
 

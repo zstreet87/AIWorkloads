@@ -5,7 +5,7 @@ requirements:
   - torch
 env_vars:
   HF_DATASETS_CACHE: "/mnt/shared/datasets_cache"
-cmd: "python"
+cmd: "bash workload.sh"
 script: "hf.py"
 model_name: "bert-base-uncased"
 task: "text-classification"
