@@ -4,20 +4,15 @@ import os
 def generate_job_schedular_script(cfg):
 
     env_vars = ""
-
-    def add_env_vars(vars):
-        nonlocal env_vars
-        for key, value in vars.items():
+    if cfg.workload.env_vars:
+        for key, value in cfg.workloads.env_vars.items():
             env_vars += f"export {key}='{value}'\n"
 
-    if cfg.workload.env_vars:
-        add_env_vars(cfg.workload.env_vars)
-
-    extra = ""
+    end_cmd = ""
     if cfg.workload.type == "huggingface":
-        extra = f"{cfg.workload.script}"
+        end_cmd = f"{cfg.workload.script}"
     if cfg.workload.type == "superbench":
-        extra = f"--config-file {cfg.workload}"
+        end_cmd = f"--config-file {cfg.workload}"
 
     if cfg.job_schedular.type == "slurm":
 
@@ -51,7 +46,7 @@ echo "***********************"
 module load singularity  # Load Singularity module using LMod
 srun singularity exec \\
     -B {cfg.paths.shared_file_system}:{cfg.paths.shared_file_system} \\ # mounting shared-file system
-    {cfg.workload.prefix}{cfg.paths.shred_file_system}/{cfg.containerization.image_name} {cfg.workload.cmd} {extra}
+    {cfg.containerization.prefix}{cfg.paths.shared_file_system}/{cfg.containerization.image_name} {cfg.workload.cmd} {end_cmd}
         """
 
         script_path = os.path.join(cfg.paths.shared_file_system, "slurm_job.sh")
