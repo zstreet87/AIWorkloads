@@ -1,0 +1,9 @@
+type: "example"
+requirements:
+  - torch
+cmd: "bash workload.sh"
+script: "ddp_example.py"
+output:
+  model_save_path: "/workspace"
+  results_save_path: "/workspace"
+additional_args: ""

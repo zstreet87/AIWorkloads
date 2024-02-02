@@ -2,7 +2,6 @@ import os
 
 
 def generate_job_schedular_script(cfg):
-
     env_vars = ""
     if cfg.workload.env_vars:
         for key, value in cfg.workload.env_vars.items():
@@ -12,9 +11,9 @@ def generate_job_schedular_script(cfg):
     if cfg.workload.type == "superbench":
         end_cmd = f"--config-file {cfg.workload}"
 
+    job_schedular_script = ""
     if cfg.job_schedular.type == "slurm":
-
-        slurm_script = f"""#!/usr/bin/env bash
+        job_schedular_script = f"""#!/usr/bin/env bash
 #SBATCH --job-name={cfg.job_schedular.job_name}
 #SBATCH --output=job.%j.out 
 #SBATCH --partition={cfg.job_schedular.partition}
@@ -47,11 +46,11 @@ srun singularity exec \\
     {cfg.containerization.prefix}{cfg.paths.shared_file_system}/{cfg.containerization.image_name} {cfg.workload.cmd} {end_cmd}
         """
 
-        script_path = os.path.join(cfg.paths.shared_file_system, "slurm_job.sh")
-        with open(script_path, "w") as file:
-            file.write(slurm_script)
-        print(f"Slurm script generated at {script_path}")
-
     if cfg.job_schedular.type == "kubernetes":
         # TODO: Need to implement the kubernetes-job-schedular-script generation
         pass
+
+    script_path = os.path.join(cfg.paths.shared_file_system, "job_schedular.sh")
+    with open(script_path, "w") as file:
+        file.write(job_schedular_script)
+    print(f"Job-schedular script generated at {script_path}")

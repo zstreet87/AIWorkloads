@@ -19,11 +19,18 @@ python {cfg.workload.script} \\
     --results_save_path {cfg.paths.shared_file_system} \\
     {cfg.workload.additional_args}
         """
+
     if cfg.workload.type == "superbench":
         # TODO: Implement superbench workload script generation
         pass
 
+    if cfg.workload.type == "example":
+        workload_script = f"""#!/usr/bin/env bash
+# example script
+python {cfg.workload.script} \\
+        """
+
     script_path = os.path.join(cfg.paths.shared_file_system, "workload.sh")
     with open(script_path, "w") as file:
         file.write(workload_script)
-    print(f"AI workload script generated at {script_path}")
+    print(f"Workload script generated at {script_path}")
