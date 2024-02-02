@@ -51,7 +51,7 @@ echo "***********************"
 module load singularity  # Load Singularity module using LMod
 srun singularity exec \\
     -B {cfg.paths.shared_file_system}:{cfg.paths.shared_file_system} \\ # mounting shared-file system
-    {cfg.workload.container_prefix}{cfg.paths.shred_file_system}/{cfg.containerization.image_name} {cfg.workload.cmd} {extra}
+    {cfg.workload.prefix}{cfg.paths.shred_file_system}/{cfg.containerization.image_name} {cfg.workload.cmd} {extra}
         """
 
         script_path = os.path.join(cfg.paths.shared_file_system, "slurm_job.sh")
