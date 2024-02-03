@@ -32,7 +32,6 @@ export LOCAL_RANK=$SLURM_LOCALID
 export RANK=$SLURM_PROCID
 
 {env_vars}
-
 {module_loads}
 
 srun singularity exec -B \
@@ -46,6 +45,8 @@ srun singularity exec -B \
         # TODO: Need to implement the kubernetes-job-schedular-script generation
         pass
 
+    # TODO: should make a $HOME hidden folder .aiworkloads/date_time_folder/generated_files
+    # TODO: this is where everything should point to to run the workload
     script_path = os.path.join(cfg.paths.login_node, "job_schedular.sh")
     with open(script_path, "w") as file:
         file.write(job_schedular_script)

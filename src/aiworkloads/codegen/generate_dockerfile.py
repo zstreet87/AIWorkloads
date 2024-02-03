@@ -40,6 +40,8 @@ def generate_dockerfile(cfg):
                 dockerfile_content += f"    && {command} \\\n"
             dockerfile_content += "    && rm -rf /tmp/{}*\n".format(package.name)
 
+    # TODO: should make a $HOME hidden folder .aiworkloads/date_time_folder/generated_files
+    # TODO: this is where everything should point to to run the workload
     script_path = os.path.join(cfg.paths.login_node, "Dockerfile")
     with open(script_path, "w") as file:
         file.write(dockerfile_content)

@@ -7,7 +7,7 @@ def generate_workload_script(cfg):
     if cfg.workload.type == "huggingface":
         workload_script = f"""#!/usr/bin/env bash
 # HF script
-python {cfg.workload.script} \\
+python {cfg.paths.login_node}{cfg.workload.script} \\
     --model_name {cfg.workload.model_name} \\
     --task {cfg.workload.task} \\
     --dataset {cfg.workload.training.dataset} \\
@@ -30,6 +30,8 @@ python {cfg.workload.script} \\
 python {cfg.workload.script}
         """
 
+    # TODO: should make a $HOME hidden folder .aiworkloads/date_time_folder/generated_files
+    # TODO: this is where everything should point to to run the workload
     script_path = os.path.join(cfg.paths.login_node, "workload.sh")
     with open(script_path, "w") as file:
         file.write(workload_script)
