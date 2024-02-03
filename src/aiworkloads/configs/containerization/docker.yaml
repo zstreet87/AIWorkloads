@@ -1,3 +1,4 @@
 type: "docker"
 image_name: "my_image"
 prefix: "docker-archive://"
+suffix: ""

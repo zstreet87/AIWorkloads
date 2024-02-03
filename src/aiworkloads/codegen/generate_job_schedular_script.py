@@ -7,6 +7,9 @@ def generate_job_schedular_script(cfg):
         for key, value in cfg.workload.env_vars.items():
             env_vars += f"export {key}='{value}'\n"
 
+# TODO: module loads in slurm config to add
+    module_loads = ""
+
     end_cmd = ""
     if cfg.workload.type == "superbench":
         end_cmd = f"--config-file {cfg.workload}"
@@ -30,9 +33,13 @@ export RANK=$SLURM_PROCID
 
 {env_vars}
 
-# TODO: module load in slurm config
-module load singularity  # Load Singularity module using LMod
-srun singularity exec -B {cfg.paths.shared_file_system}:{cfg.paths.shared_file_system} {cfg.containerization.prefix}{cfg.paths.shared_file_system}/{cfg.containerization.image_name} {cfg.workload.cmd} {end_cmd}
+{module_loads}
+
+srun singularity exec -B \
+{cfg.paths.shared_file_system}:{cfg.paths.shared_file_system} \
+{cfg.containerization.prefix}{cfg.paths.shared_file_system}/{cfg.containerization.image_name}{cfg.containerization.suffix} \
+{cfg.workload.cmd} \
+{end_cmd}
         """
 
     if cfg.job_schedular.type == "kubernetes":
