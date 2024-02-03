@@ -30,7 +30,7 @@ python {cfg.workload.script} \\
 python {cfg.workload.script} \\
         """
 
-    script_path = os.path.join(cfg.paths.shared_file_system, "workload.sh")
+    script_path = os.path.join(cfg.paths.login_node, "workload.sh")
     with open(script_path, "w") as file:
         file.write(workload_script)
     print(f"Workload script generated at {script_path}")

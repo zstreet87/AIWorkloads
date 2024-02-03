@@ -28,27 +28,18 @@ export WORLD_SIZE=$(($SLURM_NNODES * $GPUS_PER_NODE))
 export LOCAL_RANK=$SLURM_LOCALID
 export RANK=$SLURM_PROCID
 
-echo "# SLURM Launch Info"
-echo "MASTER_PORT="$MASTER_PORT
-echo "MASTER_ADDR="$MASTER_ADDR
-echo "WORLD_SIZE="$WORLD_SIZE
-echo "GPUS_PER_NODE="$GPUS_PER_NODE
-echo "LOCAL_RANK="$LOCAL_RANK
-echo "RANK="$RANK
-
 {env_vars}
 
+# TODO: module load in slurm config
 module load singularity  # Load Singularity module using LMod
-srun singularity exec \\
-    -B {cfg.paths.shared_file_system}:{cfg.paths.shared_file_system} \\ # mounting shared-file system
-    {cfg.containerization.prefix}{cfg.paths.shared_file_system}/{cfg.containerization.image_name} {cfg.workload.cmd} {end_cmd}
+srun singularity exec -B {cfg.paths.shared_file_system}:{cfg.paths.shared_file_system} {cfg.containerization.prefix}{cfg.paths.shared_file_system}/{cfg.containerization.image_name} {cfg.workload.cmd} {end_cmd}
         """
 
     if cfg.job_schedular.type == "kubernetes":
         # TODO: Need to implement the kubernetes-job-schedular-script generation
         pass
 
-    script_path = os.path.join(cfg.paths.shared_file_system, "job_schedular.sh")
+    script_path = os.path.join(cfg.paths.login_node, "job_schedular.sh")
     with open(script_path, "w") as file:
         file.write(job_schedular_script)
     print(f"Job-schedular script generated at {script_path}")
