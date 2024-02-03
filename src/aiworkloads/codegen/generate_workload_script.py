@@ -16,7 +16,7 @@ python {cfg.paths.cache}{cfg.workload.script} \\
     --num_epochs {cfg.workload.num_epochs} \\
     --learning_rate {cfg.workload.training.learning_rate} \\
     --model_save_path {cfg.paths.work} \\
-    --results_save_path {cfg.paths.work} \\
+    --results_save_path {cfg.paths.cwd} \\
     {cfg.workload.additional_args}
         """
 
