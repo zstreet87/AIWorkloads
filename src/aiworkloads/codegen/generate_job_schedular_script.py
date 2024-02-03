@@ -10,9 +10,9 @@ def generate_job_schedular_script(cfg):
 # TODO: module loads in slurm config to add
     module_loads = ""
 
-    end_cmd = ""
+    extra = ""
     if cfg.workload.type == "superbench":
-        end_cmd = f"--config-file {cfg.workload}"
+        extra = f"--config-file {cfg.workload}"
 
     job_schedular_script = ""
     if cfg.job_schedular.type == "slurm":
@@ -35,19 +35,17 @@ export RANK=$SLURM_PROCID
 {module_loads}
 
 srun singularity exec -B \
-{cfg.paths.shared_file_system}:{cfg.paths.shared_file_system} \
-{cfg.containerization.prefix}{cfg.paths.shared_file_system}/{cfg.containerization.image_name}{cfg.containerization.suffix} \
-{cfg.workload.cmd} \
-{end_cmd}
+{cfg.paths.work}:{cfg.paths.work} \
+{cfg.containerization.prefix}{cfg.paths.work}/{cfg.containerization.image_name}{cfg.containerization.suffix} \
+{cfg.paths.cache}{cfg.workload.cmd} \
+{extra}
         """
 
     if cfg.job_schedular.type == "kubernetes":
         # TODO: Need to implement the kubernetes-job-schedular-script generation
         pass
 
-    # TODO: should make a $HOME hidden folder .aiworkloads/date_time_folder/generated_files
-    # TODO: this is where everything should point to to run the workload
-    script_path = os.path.join(cfg.paths.login_node, "job_schedular.sh")
+    script_path = os.path.join(cfg.paths.cache, "job_schedular.sh")
     with open(script_path, "w") as file:
         file.write(job_schedular_script)
     print(f"Job-schedular script generated at {script_path}")

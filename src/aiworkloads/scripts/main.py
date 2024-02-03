@@ -8,6 +8,7 @@ from aiworkloads.codegen import (
 )
 
 from aiworkloads.scripts.utils import (
+    setup_paths,
     copy_workload_to_path,
     build_save_image,
     submit_job,
@@ -17,6 +18,7 @@ from aiworkloads.scripts.utils import (
 @hydra.main(version_base=None, config_path="../configs", config_name="config")
 def main(cfg: DictConfig) -> None:
 
+    setup_paths(cfg)
     generate_workload_script(cfg)
     copy_workload_to_path(cfg)
     generate_dockerfile(cfg)

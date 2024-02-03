@@ -1,3 +1,4 @@
 paths:
-  login_node: "${env:HOME}"
-  shared_file_system: "${env:WORK}"
+  work: "${env:WORK}"
+  cwd: ""
+  cache: ""

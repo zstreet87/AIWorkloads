@@ -1,15 +1,20 @@
 import subprocess
+from pathlib import Path
 import shutil
 import os
+
+def setup_paths(cfg):
+    cache_folder = Path.home() / ".cache" / "aiworkloads"
+    cache_folder.mkdir(parents=True, exist_ok=True)
+    cfg.paths.cache = str(cache_folder)
+    cfg.paths.cwd = str(Path.cwd())
 
 
 def submit_job(cfg):
     if cfg.job_schedular.type == "slurm":
-        # Full path to the SLURM job script
-        full_script_path = f"{cfg.paths.shared_file_system}/job_schedular.sh"
+        full_script_path = f"{cfg.paths.cache}/job_schedular.sh"
 
         try:
-            # Submit the job using sbatch
             subprocess.run(["sbatch", full_script_path], check=True)
             print(f"SLURM job submitted successfully using script: {full_script_path}")
         except subprocess.CalledProcessError as e:
@@ -20,15 +25,14 @@ def submit_job(cfg):
 
 
 def copy_workload_to_path(cfg):
-    # copying selected workload
     if cfg.workload.script:
         src = os.path.join(
             os.getcwd(), "src/aiworkloads/workloads", cfg.workload.script
         )
-        dest = os.path.join(cfg.paths.shared_file_system, cfg.workload.script)
+        dest = os.path.join(cfg.paths.cache, cfg.workload.script)
         shutil.copyfile(src, dest)
         print(
-            f"Copied workload script {cfg.workload.script} to {cfg.paths.shared_file_system}"
+            f"Copied workload script {cfg.workload.script} to {cfg.paths.cache}"
         )
 
 
@@ -36,17 +40,17 @@ def build_save_image(cfg):
 
     if cfg.containerization.type == "docker":
         tarball = (
-            f"{cfg.paths.shared_file_system}/{cfg.containerization.image_name}.tar"
+            f"{cfg.paths.work}/{cfg.containerization.image_name}.tar"
         )
 
         # Check if the tarball already exists
         if os.path.exists(tarball):
             print(
-                f"Docker image tarball already exists at '{cfg.paths.shared_file_system}'. Not using generated Dockerfile, skipping build and save."
+                f"Docker image tarball already exists at '{cfg.paths.work}'. Not using generated Dockerfile, skipping build and save."
             )
             return
 
-        build_command = f"docker build -t {cfg.containerization.image_name} {cfg.paths.shared_file_system}"
+        build_command = f"docker build -t {cfg.containerization.image_name} {cfg.paths.work}"
         try:
             subprocess.run(build_command, check=True, shell=True)
             print(f"Docker image '{tarball}' built successfully.")
@@ -63,19 +67,19 @@ def build_save_image(cfg):
 
     if cfg.containerization.type == "singularity":
 
-        sif = f"{cfg.paths.shared_file_system}/{cfg.containerization.image_name}.sif"
+        sif = f"{cfg.paths.work}/{cfg.containerization.image_name}.sif"
 
         # Check if the tarball already exists
         if os.path.exists(sif):
             print(
-                f"Singularity image already exists at '{cfg.paths.shared_file_system}'. Not using generated Dockerfile, skipping build and save."
+                f"Singularity image already exists at '{cfg.paths.work}'. Not using generated Dockerfile, skipping build and save."
             )
             return
-        build_command = f"singularity build --fakeroot {cfg.containerization.image_name} docker:/{cfg.paths.shared_file_system}"
+        build_command = f"singularity build --fakeroot {cfg.containerization.image_name} docker:/{cfg.paths.work}"
         try:
             subprocess.run(build_command, check=True, shell=True)
             print(
-                f"Singularity image '{cfg.paths.shared_file_system}/{cfg.containerization.image_name}' built successfully."
+                f"Singularity image '{cfg.paths.work}/{cfg.containerization.image_name}' built successfully."
             )
         except subprocess.CalledProcessError as e:
             print(f"Error occurred while building Singularity image: {e}")
