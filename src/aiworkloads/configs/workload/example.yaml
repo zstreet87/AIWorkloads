@@ -1,7 +1,8 @@
 type: "example"
 requirements:
   - torch
-cmd: "bash workload.sh"
+cmd: "bash"
+runner: "workload.sh"
 script: "ddp_example.py"
 env_vars: ""
 additional_args: ""

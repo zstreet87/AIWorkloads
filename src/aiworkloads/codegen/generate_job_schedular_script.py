@@ -10,9 +10,11 @@ def generate_job_schedular_script(cfg):
 # TODO: module loads in slurm config to add
     module_loads = ""
 
-    extra = ""
+    workload_cmd = ""
+    if cfg.workload.type == "huggingface":
+        workload_cmd = f"{cfg.workload.cmd} {cfg.paths.cache}{cfg.workload.runner}"
     if cfg.workload.type == "superbench":
-        extra = f"--config-file {cfg.workload}"
+        workload_cmd = f"{cfg.workload.cmd} --config-file {cfg.workload.superbench_config}"
 
     job_schedular_script = ""
     if cfg.job_schedular.type == "slurm":
@@ -37,8 +39,7 @@ export RANK=$SLURM_PROCID
 srun singularity exec -B \
 {cfg.paths.work}:{cfg.paths.work} \
 {cfg.containerization.prefix}{cfg.paths.work}/{cfg.containerization.image_name}{cfg.containerization.suffix} \
-{cfg.paths.cache}{cfg.workload.cmd} \
-{extra}
+{workload_cmd}
         """
 
     if cfg.job_schedular.type == "kubernetes":
