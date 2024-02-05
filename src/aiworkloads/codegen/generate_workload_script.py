@@ -10,8 +10,8 @@ def generate_workload_script(cfg):
 python {cfg.paths.cache}/{cfg.workload.script} \\
     --model_name {cfg.workload.model_name} \\
     --task {cfg.workload.task} \\
-    --dataset {cfg.workload.training.dataset} \\
-    --dataset_config {cfg.workload.training.dataset_config} \\
+    --dataset_name {cfg.workload.training.dataset} \\
+    --dataset_config_name {cfg.workload.training.dataset_config} \\
     --batch_size {cfg.workload.batch_size} \\
     --num_epochs {cfg.workload.num_epochs} \\
     --learning_rate {cfg.workload.training.learning_rate} \\

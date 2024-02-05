@@ -33,6 +33,7 @@ def train_model(
     num_epochs,
     learning_rate,
     model_save_path,
+    results_save_path,
 ):
     local_rank = setup_distributed_training()
 
@@ -72,7 +73,7 @@ def train_model(
         save_strategy="epoch",
         load_best_model_at_end=True,
         metric_for_best_model="accuracy",
-        logging_dir="./logs",
+        logging_dir=results_save_path,
         report_to="none",  # Disable logging to WANDB or other external services.
         local_rank=local_rank,  # Important for Hugging Face to recognize distributed training
     )
@@ -109,6 +110,7 @@ def main():
     parser.add_argument("--num_epochs", type=int, default=3)
     parser.add_argument("--learning_rate", type=float, default=5e-5)
     parser.add_argument("--model_save_path", type=str, required=True)
+    parser.add_argument("--results_save_path", type=str, required=True)
     args = parser.parse_args()
 
     train_model(
@@ -120,6 +122,7 @@ def main():
         args.num_epochs,
         args.learning_rate,
         args.model_save_path,
+        args.results_save_path,
     )
 
 
