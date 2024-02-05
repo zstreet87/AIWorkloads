@@ -7,11 +7,12 @@ def generate_job_schedular_script(cfg):
         for key, value in cfg.workload.env_vars.items():
             env_vars += f"export {key}='{value}'\n"
 
-# TODO: module loads in slurm config to add
+    # TODO: module loads in slurm config to add
     module_loads = ""
 
+    # TODO: perhaps a better abstraction would get rid of this ugliness
     workload_cmd = ""
-    if cfg.workload.type == "huggingface":
+    if cfg.workload.type == "huggingface" or cfg.workload.type == "example":
         workload_cmd = f"{cfg.workload.cmd} {cfg.paths.cache}{cfg.workload.runner}"
     if cfg.workload.type == "superbench":
         workload_cmd = f"{cfg.workload.cmd} --config-file {cfg.workload.superbench_config}"
