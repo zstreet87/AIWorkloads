@@ -7,7 +7,7 @@ def generate_workload_script(cfg):
     if cfg.workload.type == "huggingface":
         workload_script = f"""#!/usr/bin/env bash
 # HF script
-python {cfg.paths.cache}{cfg.workload.script} \\
+python {cfg.paths.cache}/{cfg.workload.script} \\
     --model_name {cfg.workload.model_name} \\
     --task {cfg.workload.task} \\
     --dataset {cfg.workload.training.dataset} \\
