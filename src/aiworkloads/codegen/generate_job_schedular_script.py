@@ -13,7 +13,7 @@ def generate_job_schedular_script(cfg):
     # TODO: perhaps a better abstraction would get rid of this ugliness
     workload_cmd = ""
     if cfg.workload.type == "huggingface" or cfg.workload.type == "example":
-        workload_cmd = f"{cfg.workload.cmd} {cfg.paths.cache}{cfg.workload.runner}"
+        workload_cmd = f"{cfg.workload.cmd} {cfg.paths.cache}/{cfg.workload.runner}"
     if cfg.workload.type == "superbench":
         workload_cmd = f"{cfg.workload.cmd} --config-file {cfg.workload.superbench_config}"
 
