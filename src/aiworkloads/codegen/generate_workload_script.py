@@ -27,7 +27,7 @@ python {cfg.paths.cache}/{cfg.workload.script} \\
     if cfg.workload.type == "example":
         workload_script = f"""#!/usr/bin/env bash
 # example script
-python {cfg.workload.script}
+python {cfg.paths.cache}/{cfg.workload.script}
         """
 
     script_path = os.path.join(cfg.paths.cache, "workload.sh")
