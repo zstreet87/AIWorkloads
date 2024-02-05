@@ -15,7 +15,9 @@ def generate_job_schedular_script(cfg):
     if cfg.workload.type == "huggingface" or cfg.workload.type == "example":
         workload_cmd = f"{cfg.workload.cmd} {cfg.paths.cache}/{cfg.workload.runner}"
     if cfg.workload.type == "superbench":
-        workload_cmd = f"{cfg.workload.cmd} --config-file {cfg.workload.superbench_config}"
+        workload_cmd = (
+            f"{cfg.workload.cmd} --config-file {cfg.workload.superbench_config}"
+        )
 
     job_schedular_script = ""
     if cfg.job_schedular.type == "slurm":

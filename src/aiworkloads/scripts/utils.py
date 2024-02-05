@@ -3,6 +3,7 @@ from pathlib import Path
 import shutil
 import os
 
+
 def setup_paths(cfg):
     cache_folder = Path.home() / ".cache" / "aiworkloads"
     cache_folder.mkdir(parents=True, exist_ok=True)
@@ -31,17 +32,13 @@ def copy_workload_to_path(cfg):
         )
         dest = os.path.join(cfg.paths.cache, cfg.workload.script)
         shutil.copyfile(src, dest)
-        print(
-            f"Copied workload script {cfg.workload.script} to {cfg.paths.cache}"
-        )
+        print(f"Copied workload script {cfg.workload.script} to {cfg.paths.cache}")
 
 
 def build_save_image(cfg):
 
     if cfg.containerization.type == "docker":
-        tarball = (
-            f"{cfg.paths.work}/{cfg.containerization.image_name}.tar"
-        )
+        tarball = f"{cfg.paths.work}/{cfg.containerization.image_name}.tar"
 
         # Check if the tarball already exists
         if os.path.exists(tarball):
@@ -50,7 +47,9 @@ def build_save_image(cfg):
             )
             return
 
-        build_command = f"docker build -t {cfg.containerization.image_name} {cfg.paths.work}"
+        build_command = (
+            f"docker build -t {cfg.containerization.image_name} {cfg.paths.work}"
+        )
         try:
             subprocess.run(build_command, check=True, shell=True)
             print(f"Docker image '{tarball}' built successfully.")
