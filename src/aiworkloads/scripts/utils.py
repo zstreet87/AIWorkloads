@@ -27,7 +27,7 @@ def submit_job(cfg):
 def copy_workload_to_path(cfg):
     if cfg.workload.script:
         src = os.path.join(
-            os.getcwd(), "src/aiworkloads/workloads", cfg.workload.script
+            Path.home(), "AIWorkloads/src/aiworkloads/workloads", cfg.workload.script
         )
         dest = os.path.join(cfg.paths.cache, cfg.workload.script)
         shutil.copyfile(src, dest)
