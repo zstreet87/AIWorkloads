@@ -29,7 +29,7 @@ def generate_job_schedular_script(cfg):
 
 export MASTER_PORT=$(expr 10000 + $(echo -n $SLURM_JOBID | tail -c 4))
 export MASTER_ADDR=$(scontrol show hostnames "$SLURM_JOB_NODELIST" | head -n 1)
-export GPUS_PER_NODE=$(echo "$SLURM_GPUS_ON_NODE" | grep -o '[0-9]*' | head -n 1)
+export GPUS_PER_NODE=$(echo "$SLURM_TASKS_PER_NODE" | grep -o '[0-9]*' | head -n 1)
 export WORLD_SIZE=$(($SLURM_NNODES * $GPUS_PER_NODE))
 export LOCAL_RANK=$SLURM_LOCALID
 export RANK=$SLURM_PROCID
