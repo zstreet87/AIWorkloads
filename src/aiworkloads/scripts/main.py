@@ -18,8 +18,8 @@ from aiworkloads.scripts.utils import (
 @hydra.main(version_base=None, config_path="../configs", config_name="config")
 def main(cfg: DictConfig) -> None:
 
-    if cfg.workflow.setup_paths:
-        setup_paths(cfg)
+    setup_paths(cfg)
+
     if cfg.workflow.generate_workload_script:
         generate_workload_script(cfg)
     if cfg.workflow.copy_workload_to_path:

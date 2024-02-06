@@ -1,5 +1,4 @@
 workflow:
-  setup_paths: true
   generate_workload_script: true
   copy_workload_to_path: true
   generate_image: true
