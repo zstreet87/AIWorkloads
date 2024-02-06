@@ -1,6 +1,5 @@
 workflow:
-  generate_workload_script: true
-  copy_workload_to_path: true
-  generate_image: true
-  generate_job_schedular_script: true
+  setup_workload: true
+  setup_image: true
+  setup_job_schedular: true
   submit_job: true

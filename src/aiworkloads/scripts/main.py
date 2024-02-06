@@ -20,14 +20,13 @@ def main(cfg: DictConfig) -> None:
 
     setup_paths(cfg)
 
-    if cfg.workflow.generate_workload_script:
+    if cfg.workflow.setup_workload:
         generate_workload_script(cfg)
-    if cfg.workflow.copy_workload_to_path:
         copy_workload_to_path(cfg)
-    if cfg.workflow.generate_image:
+    if cfg.workflow.setup_image:
         generate_dockerfile(cfg)
         build_save_image(cfg)
-    if cfg.workflow.generate_job_schedular_script:
+    if cfg.workflow.setup_job_schedular:
         generate_job_schedular_script(cfg)
     if cfg.workflow.submit_job:
         submit_job(cfg)
