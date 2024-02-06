@@ -1,7 +1,8 @@
 defaults:
-  - containerization: docker  # Default to Docker configuration
-  - job_schedular: slurm      # Default to Slurm configuration
-  - workload: huggingface     # Default to Huggingface configuration
+  - containerization: singularity
+  - job_schedular: slurm
+  - workload: huggingface
   - dockerfile
   - paths
+  - workflow
   - _self_
