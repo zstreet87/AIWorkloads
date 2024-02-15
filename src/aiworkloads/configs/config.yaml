@@ -1,7 +1,7 @@
 defaults:
   - containerization: singularity
   - job_schedular: slurm
-  - workload: huggingface
+  - model_framework: huggingface
   - dockerfile
   - paths
   - workflow

@@ -12,13 +12,13 @@ def generate_dockerfile(cfg):
         packages = " ".join(distro_cfg.additional_packages)
         dockerfile_content += f"RUN {distro_cfg.install_command} {packages}\n"
 
-    if cfg.workload == "huggingface":
+    if cfg.model_framework == "huggingface":
         dockerfile_content += (
-            f"COPY {cfg.workload.huggingface.script} {cfg.dockerfile.workdir}/\n"
+            f"COPY {cfg.model_framework.huggingface.script} {cfg.dockerfile.workdir}/\n"
         )
         dockerfile_content += "RUN pip install -r requirements.txt\n"
         dockerfile_content += (
-            "RUN pip install " + " ".join(cfg.workload.huggingface.requirements) + "\n"
+            "RUN pip install " + " ".join(cfg.model_framework.huggingface.requirements) + "\n"
         )
 
     if cfg.dockerfile.python_packages:

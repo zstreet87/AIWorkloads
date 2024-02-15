@@ -25,14 +25,14 @@ def submit_job(cfg):
         pass
 
 
-def copy_workload_to_path(cfg):
-    if cfg.workload.script:
+def copy_model_framework_to_path(cfg):
+    if cfg.model_framework.script:
         src = os.path.join(
-            Path.home(), "AIWorkloads/src/aiworkloads/workloads", cfg.workload.script
+            Path.home(), "AIWorkloads/src/aiworkloads/model_framework", cfg.model_framework.script
         )
-        dest = os.path.join(cfg.paths.cache, cfg.workload.script)
+        dest = os.path.join(cfg.paths.cache, cfg.model_framework.script)
         shutil.copyfile(src, dest)
-        print(f"Copied workload script {cfg.workload.script} to {cfg.paths.cache}")
+        print(f"Copied model_framework script {cfg.model_framework.script} to {cfg.paths.cache}")
 
 
 def build_save_image(cfg):

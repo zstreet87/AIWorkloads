@@ -1,5 +1,5 @@
 workflow:
-  setup_workload: true
+  setup_model_framework: true
   setup_image: true
   setup_job_schedular: true
   submit_job: true

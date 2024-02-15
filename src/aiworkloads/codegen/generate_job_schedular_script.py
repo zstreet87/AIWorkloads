@@ -3,20 +3,20 @@ import os
 
 def generate_job_schedular_script(cfg):
     env_vars = ""
-    if cfg.workload.env_vars:
-        for key, value in cfg.workload.env_vars.items():
+    if cfg.model_framework.env_vars:
+        for key, value in cfg.model_framework.env_vars.items():
             env_vars += f"export {key}='{value}'\n"
 
     # TODO: module loads in slurm config to add
     module_loads = ""
 
     # TODO: perhaps a better abstraction would get rid of this ugliness
-    workload_cmd = ""
-    if cfg.workload.type == "huggingface" or cfg.workload.type == "example":
-        workload_cmd = f"{cfg.workload.cmd} {cfg.paths.cache}/{cfg.workload.runner}"
-    if cfg.workload.type == "superbench":
-        workload_cmd = (
-            f"{cfg.workload.cmd} --config-file {cfg.workload.superbench_config}"
+    model_framework_cmd = ""
+    if cfg.model_framework.type == "huggingface" or cfg.model_framework.type == "example":
+        model_framework_cmd = f"{cfg.model_framework.cmd} {cfg.paths.cache}/{cfg.model_framework.runner}"
+    if cfg.model_framework.type == "superbench":
+        model_framework_cmd = (
+            f"{cfg.model_framework.cmd} --config-file {cfg.model_framework.superbench_config}"
         )
 
     job_schedular_script = ""
@@ -42,7 +42,7 @@ export RANK=$SLURM_PROCID
 srun singularity exec -B \
 {cfg.paths.work}:{cfg.paths.work} \
 {cfg.containerization.prefix}{cfg.paths.work}/{cfg.containerization.image_name}{cfg.containerization.suffix} \
-{workload_cmd}
+{model_framework_cmd}
         """
 
     if cfg.job_schedular.type == "kubernetes":
