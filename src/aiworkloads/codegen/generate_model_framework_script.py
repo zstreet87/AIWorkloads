@@ -1,7 +1,7 @@
 from pathlib import Path
 
 
-def generate_workload_script(cfg):
+def generate_model_framework_script(cfg):
     model_framework_script = ""
     # NOTE: only supporting hf script generation at the moment
     if cfg.model_framework.type == "huggingface":
