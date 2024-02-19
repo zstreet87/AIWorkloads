@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 
 
 def generate_dockerfile(cfg):
@@ -18,7 +18,9 @@ def generate_dockerfile(cfg):
         )
         dockerfile_content += "RUN pip install -r requirements.txt\n"
         dockerfile_content += (
-            "RUN pip install " + " ".join(cfg.model_framework.huggingface.requirements) + "\n"
+            "RUN pip install "
+            + " ".join(cfg.model_framework.huggingface.requirements)
+            + "\n"
         )
 
     if cfg.dockerfile.python_packages:
@@ -40,7 +42,6 @@ def generate_dockerfile(cfg):
                 dockerfile_content += f"    && {command} \\\n"
             dockerfile_content += "    && rm -rf /tmp/{}*\n".format(package.name)
 
-    script_path = os.path.join(cfg.paths.cache, "Dockerfile")
-    with open(script_path, "w") as file:
-        file.write(dockerfile_content)
+    script_path = Path(cfg.paths.cache) / "Dockerfile"
+    script_path.write_text(dockerfile_content)
     print(f"Dockerfile script generated at {script_path}")

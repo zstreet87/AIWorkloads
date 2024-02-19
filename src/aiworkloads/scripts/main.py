@@ -17,7 +17,6 @@ from aiworkloads.scripts.utils import (
 
 @hydra.main(version_base=None, config_path="../configs", config_name="config")
 def main(cfg: DictConfig) -> None:
-
     setup_paths(cfg)
 
     if cfg.workflow.setup_model_framework:

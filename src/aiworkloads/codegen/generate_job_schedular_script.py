@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 
 
 def generate_job_schedular_script(cfg):
@@ -12,14 +12,18 @@ def generate_job_schedular_script(cfg):
 
     # TODO: perhaps a better abstraction would get rid of this ugliness
     model_framework_cmd = ""
-    if cfg.model_framework.type == "huggingface" or cfg.model_framework.type == "example":
-        model_framework_cmd = f"{cfg.model_framework.cmd} {cfg.paths.cache}/{cfg.model_framework.runner}"
-    if cfg.model_framework.type == "superbench":
+    if (
+        cfg.model_framework.type == "huggingface"
+        or cfg.model_framework.type == "example"
+    ):
         model_framework_cmd = (
-            f"{cfg.model_framework.cmd} --config-file {cfg.model_framework.superbench_config}"
+            f"{cfg.model_framework.cmd} {cfg.paths.cache}/{cfg.model_framework.runner}"
         )
+    if cfg.model_framework.type == "superbench":
+        model_framework_cmd = f"{cfg.model_framework.cmd} --config-file {cfg.model_framework.superbench_config}"
 
     job_schedular_script = ""
+
     if cfg.job_schedular.type == "slurm":
         job_schedular_script = f"""#!/usr/bin/env bash
 #SBATCH --job-name={cfg.job_schedular.job_name}
@@ -45,11 +49,11 @@ srun singularity exec -B \
 {model_framework_cmd}
         """
 
-    if cfg.job_schedular.type == "kubernetes":
-        # TODO: Need to implement the kubernetes-job-schedular-script generation
-        pass
+    if cfg.job_schedular.type == "k8":
+        job_schedular_script = f"""#!/usr/bin/env bash
+kubectle create -f {cfg.job_schedular}
+        """
 
-    script_path = os.path.join(cfg.paths.cache, "job_schedular.sh")
-    with open(script_path, "w") as file:
-        file.write(job_schedular_script)
+    script_path = Path(cfg.paths.cache) / "job_schedular.sh"
+    script_path.write_text(job_schedular_script)
     print(f"Job-schedular script generated at {script_path}")

@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 
 
 def generate_workload_script(cfg):
@@ -30,7 +30,6 @@ python {cfg.paths.cache}/{cfg.model_framework.script} \\
 python {cfg.paths.cache}/{cfg.model_framework.script}
         """
 
-    script_path = os.path.join(cfg.paths.cache, "model_framework.sh")
-    with open(script_path, "w") as file:
-        file.write(model_framework_script)
-    print(f"Model framework script generated at {script_path}")
+    script_path = Path(cfg.paths.cache) / "model_framework.sh"
+    script_path.write_text(model_framework_script)
+    print(f"Job-schedular script generated at {script_path}")

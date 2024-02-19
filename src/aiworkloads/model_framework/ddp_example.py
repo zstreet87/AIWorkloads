@@ -21,7 +21,7 @@ class Net(nn.Module):
 
 rank = int(os.environ["SLURM_PROCID"])
 world_size = int(os.environ["WORLD_SIZE"])
-gpus_per_node = 4 # TODO: should get this from SLURM env var 
+gpus_per_node = 4  # TODO: should get this from SLURM env var
 assert gpus_per_node == torch.cuda.device_count()
 print(
     f"Hello from rank {rank} of {world_size} on {gethostname()} where there are"

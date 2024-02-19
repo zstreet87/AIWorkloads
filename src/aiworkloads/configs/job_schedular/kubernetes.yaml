@@ -1,3 +1,0 @@
-type: "kubernetes"
-job_file: "/path/to/k8_job.yaml"
-    # ... other Kubernetes default configurations ...
