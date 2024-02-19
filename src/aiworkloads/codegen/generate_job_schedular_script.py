@@ -51,7 +51,8 @@ srun singularity exec -B \
 
     if cfg.job_schedular.type == "k8":
         # apply the runner script to k8 config
-        cfg.job_schedular.spec.containers.args = cfg.model_framework.runner
+        for container in cfg.spec.containers:
+            cfg.job_schedular.spec.containers.args = cfg.model_framework.runner
         job_schedular_script = f"""#!/usr/bin/env bash
 kubectle create -f {cfg.job_schedular}
         """
