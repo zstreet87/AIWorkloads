@@ -13,13 +13,6 @@ WORKDIR ${workdir}
 
     copy_command_template = Template("COPY ${source} ${destination}\n")
 
-    entrypoint_template = Template(
-        """COPY src/aiworkloads/scripts/docker_entrypoint.sh /app/entrypoint.sh
-RUN chmod +x /app/entrypoint.sh
-ENTRYPOINT ["/app/entrypoint.sh"]
-"""
-    )
-
     dockerfile_content = base_template.substitute(
         base_image=cfg.dockerfile.base_image, workdir=cfg.dockerfile.workdir
     )
