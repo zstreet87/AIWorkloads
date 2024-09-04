@@ -1,4 +1,5 @@
-type: "docker"
-image_name: "my_image"
-prefix: "docker-archive://"
-suffix: ""
+containerization:
+  type: "docker"
+  image_name: "my_image"
+  prefix: "docker-archive://"
+  suffix: ""

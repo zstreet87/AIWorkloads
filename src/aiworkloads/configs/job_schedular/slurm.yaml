@@ -1,7 +1,12 @@
-type: "slurm"
-job_name: "default_slurm_job"
-partition: "devel"
-nodes: 2
-ntasks: 8
-time: "00:30:00"
-# ... other SLURM default configurations ...
+job_scheduler:
+  type: "slurm"
+  slurm:
+    env_vars:
+      SLURM_PROCID: "0"
+      WORLD_SIZE: "1"
+      GPUS_PER_NODE: "${env:GPUS_PER_NODE,1}" # Can be overridden dynamically
+  slurm_options:
+    partition: "gpu"
+    nodes: 1
+    ntasks: 1
+    time: "02:00:00"

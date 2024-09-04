@@ -1,5 +1,5 @@
 workflow:
-  setup_model_framework: true
-  setup_image: true
-  setup_job_schedular: true
-  submit_job: true
+  setup_model_framework: true # Flag to setup model framework (e.g., Hugging Face)
+  setup_image: true # Flag to build and save container image (Docker/Singularity)
+  setup_job_schedular: true # Flag to generate job scheduler scripts (SLURM/Kubernetes)
+  submit_job: true # Flag to submit the job to the scheduler

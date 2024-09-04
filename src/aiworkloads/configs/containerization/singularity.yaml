@@ -1,4 +1,5 @@
-type: "singularity"
-image_name: "my_image"
-prefix: ""
-suffix: ".sif"
+containerization:
+  type: "singularity"
+  image_name: "my_image"
+  prefix: ""
+  suffix: ".sif"

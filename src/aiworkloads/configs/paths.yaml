@@ -1,4 +1,5 @@
+# paths.yaml
 paths:
-  work: "${env:WORK}"
-  cwd: ""
-  cache: ""
+  work: "${env:WORK}" # Path to work directory within the container or cluster
+  cwd: "${hydra:runtime.cwd}" # Current working directory, dynamically set by Hydra
+  cache: "${hydra:runtime.cache_dir}" # Cache directory for storing temporary files

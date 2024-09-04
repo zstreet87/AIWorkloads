@@ -1,24 +1,25 @@
-type: "k8"
-apiVersion: batch/v1
-kind: Job
-metadata:
-  name: alexnet-tf-gpu-job
-spec:
-  template:
-    metadata:
-      labels:
-        purpose: demo-tf-amdgpu
-    spec:
-      containers:
-        - name: alexnet-tf-gpu-container
-          image: rocm/tensorflow:latest
-          workingDir: /root
-          env:
-            - name: HIP_VISIBLE_DEVICES
-              value: "0" # Use GPU 0, or -1 for CPU
-          command: ["/bin/bash", "-c", "--"]
-          args: [""]
-          resources:
-            limits:
-              amd.com/gpu: 1 # Requesting 1 GPU
-      restartPolicy: Never # Ensure the job does not restart after completion
+job_scheduler:
+  type: "k8"
+  apiVersion: batch/v1
+  kind: Job
+  metadata:
+    name: alexnet-tf-gpu-job
+  spec:
+    template:
+      metadata:
+        labels:
+          purpose: demo-tf-amdgpu
+      spec:
+        containers:
+          - name: alexnet-tf-gpu-container
+            image: rocm/tensorflow:latest
+            workingDir: /root
+            env:
+              - name: HIP_VISIBLE_DEVICES
+                value: "0" # Use GPU 0, or -1 for CPU
+            command: ["/bin/bash", "-c", "--"]
+            args: [""]
+            resources:
+              limits:
+                amd.com/gpu: 1 # Requesting 1 GPU
+        restartPolicy: Never # Ensure the job does not restart after completion

@@ -1,8 +1,7 @@
 defaults:
-  - containerization: singularity
-  - job_schedular: slurm
-  - model_framework: huggingface
-  - dockerfile
+  - containerization: ${containerization:singularity} # Default to Singularity, can be overridden
+  - job_schedular: ${job_schedular:slurm} # Default to SLURM, can be overridden
+  - model_framework: ${model_framework:huggingface} # Default to huggingface, can be overridden
   - paths
   - workflow
   - _self_

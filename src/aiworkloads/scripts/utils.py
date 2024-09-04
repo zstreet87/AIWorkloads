@@ -1,26 +1,42 @@
 import subprocess
 from pathlib import Path
 import shutil
+from string import Template
 
 
 def setup_paths(cfg):
+    """Sets up necessary paths for caching and working directories."""
     cache_folder = Path.home() / ".cache" / "aiworkloads"
     cache_folder.mkdir(parents=True, exist_ok=True)
     cfg.paths.cache = str(cache_folder)
     cfg.paths.cwd = str(Path.cwd())
 
 
-def submit_job(cfg):
-    full_script_path = Path(cfg.paths.cache) / "job_schedular.sh"
-    cmd = "sbatch" if cfg.job_schedular.type == "slurm" else "bash"
+def run_command(command, success_msg, error_msg):
+    """Runs a shell command and handles success and error messages."""
     try:
-        subprocess.run([cmd, full_script_path], check=True)
-        print(f"job submitted successfully using script: {full_script_path}")
+        subprocess.run(command, check=True, shell=True)
+        print(success_msg)
     except subprocess.CalledProcessError as e:
-        print(f"Error occurred while submitting job: {e}")
+        print(f"{error_msg}: {e}")
+
+
+def submit_job(cfg):
+    """Submits the job using the appropriate scheduler command."""
+    full_script_path = Path(cfg.paths.cache) / "job_schedular.sh"
+
+    cmd_map = {"slurm": "sbatch", "bash": "bash"}  # Default or fallback
+
+    cmd = cmd_map.get(cfg.job_schedular.type, "bash")
+    run_command(
+        f"{cmd} {full_script_path}",
+        success_msg=f"Job submitted successfully using script: {full_script_path}",
+        error_msg="Error occurred while submitting job",
+    )
 
 
 def copy_model_framework_to_path(cfg):
+    """Copies the model framework script to the cache path."""
     if cfg.model_framework.script:
         src = (
             Path.home()
@@ -38,51 +54,70 @@ def copy_model_framework_to_path(cfg):
 
 
 def build_save_image(cfg):
-    if cfg.containerization.type == "docker":
-        tarball_path = Path(cfg.paths.work) / f"{cfg.containerization.image_name}.tar"
+    """Builds and saves a Docker or Singularity image based on the configuration."""
 
-        # Check if the tarball already exists
-        if tarball_path.exists():
-            print(
-                f"Docker image tarball already exists at '{tarball_path}'. Not using generated Dockerfile, skipping build and save."
-            )
-            return
+    container_actions = {
+        "docker": lambda: docker_actions(cfg),
+        "singularity": lambda: singularity_actions(cfg),
+    }
 
-        build_command = (
-            f"docker build -t {cfg.containerization.image_name} {cfg.paths.work}"
+    action = container_actions.get(cfg.containerization.type)
+    if action:
+        action()
+
+
+def docker_actions(cfg):
+    """Handles Docker-specific build and save actions."""
+    tarball_path = Path(cfg.paths.work) / f"{cfg.containerization.image_name}.tar"
+
+    if tarball_path.exists():
+        print(
+            f"Docker image tarball already exists at '{tarball_path}'. Not using generated Dockerfile, skipping build and save."
         )
-        try:
-            subprocess.run(build_command, check=True, shell=True)
-            print(
-                f"Docker image '{cfg.containerization.image_name}' built successfully."
-            )
-        except subprocess.CalledProcessError as e:
-            print(f"Error occurred while building Docker image: {e}")
-            return  # Exit if build fails
+        return
 
-        save_command = (
-            f"docker save -o {tarball_path} {cfg.containerization.image_name}"
+    build_template = Template("docker build -t ${image_name} ${work_path}")
+    build_command = build_template.substitute(
+        image_name=cfg.containerization.image_name, work_path=cfg.paths.work
+    )
+
+    run_command(
+        build_command,
+        success_msg=f"Docker image '{cfg.containerization.image_name}' built successfully.",
+        error_msg="Error occurred while building Docker image",
+    )
+
+    save_template = Template("docker save -o ${tarball_path} ${image_name}")
+    save_command = save_template.substitute(
+        tarball_path=tarball_path, image_name=cfg.containerization.image_name
+    )
+
+    run_command(
+        save_command,
+        success_msg=f"Docker image saved as tarball at '{tarball_path}'.",
+        error_msg="Error occurred while saving Docker image as tarball",
+    )
+
+
+def singularity_actions(cfg):
+    """Handles Singularity-specific build actions."""
+    sif_path = Path(cfg.paths.work) / cfg.containerization.image_name
+
+    if sif_path.exists():
+        print(
+            f"Singularity image already exists at '{sif_path}'. Not using generated Dockerfile, skipping build and save."
         )
-        try:
-            subprocess.run(save_command, check=True, shell=True)
-            print(f"Docker image saved as tarball at '{tarball_path}'.")
-        except subprocess.CalledProcessError as e:
-            print(f"Error occurred while saving Docker image as tarball: {e}")
+        return
 
-    if cfg.containerization.type == "singularity":
-        sif_path = Path(cfg.paths.work) / cfg.containerization.image_name
-        if sif_path.exists():
-            print(
-                f"Singularity image already exists at '{sif_path}'. Not using generated Dockerfile, skipping build and save."
-            )
-            return
+    build_template = Template(
+        "singularity build --fakeroot ${sif_path} docker://${docker_image}"
+    )
+    build_command = build_template.substitute(
+        sif_path=sif_path, docker_image=cfg.paths.docker_image
+    )
 
-        # Note: Adjust the Docker image source format as needed
-        build_command = (
-            f"singularity build --fakeroot {sif_path} docker://{cfg.paths.docker_image}"
-        )
-        try:
-            subprocess.run(build_command, check=True, shell=True)
-            print(f"Singularity image '{sif_path}' built successfully.")
-        except subprocess.CalledProcessError as e:
-            print(f"Error occurred while building Singularity image: {e}")
+    run_command(
+        build_command,
+        success_msg=f"Singularity image '{sif_path}' built successfully.",
+        error_msg="Error occurred while building Singularity image",
+    )
